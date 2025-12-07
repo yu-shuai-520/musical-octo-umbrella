@@ -1,0 +1,1016 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>登录 - 数字签约系统</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* 明亮现代化设计 */
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #7209b7;
+      --accent: #f72585;
+      --success: #4cc9f0;
+      --light: #ffffff;
+      --light-gray: #f8f9fa;
+      --gray: #6c757d;
+      --dark: #212529;
+      --border: #e0e0e0;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+      --border-radius: 16px;
+    }
+
+    body.login-page {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 装饰性背景元素 */
+    .bg-decorations {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(114, 9, 183, 0.1) 100%);
+    }
+
+    .circle-1 {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      right: -150px;
+    }
+
+    .circle-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -100px;
+      left: -100px;
+    }
+
+    .circle-3 {
+      width: 150px;
+      height: 150px;
+      top: 20%;
+      right: 10%;
+    }
+
+    /* 主容器 */
+    .login-container {
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card {
+      background: var(--light);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .login-card:hover {
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+
+    /* 头部样式 */
+    .card-header {
+      background: var(--light);
+      border-bottom: none;
+      padding: 3rem 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(67, 97, 238, 0.2);
+    }
+
+    .logo-icon i {
+      font-size: 2rem;
+      color: white;
+    }
+
+    .title-section h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .title-section p {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin: 0.5rem 0 0;
+    }
+
+    /* 模式切换卡片 */
+    .mode-selector {
+      padding: 0 2rem 1.5rem;
+    }
+
+    .mode-tabs {
+      display: flex;
+      background: var(--light-gray);
+      border-radius: 12px;
+      padding: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .mode-tab {
+      flex: 1;
+      padding: 0.875rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--gray);
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .mode-tab:hover {
+      color: var(--primary);
+    }
+
+    .mode-tab.active {
+      background: var(--light);
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .mode-tab i {
+      font-size: 1.1rem;
+    }
+
+    .mode-description {
+      text-align: center;
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      padding: 0 1rem;
+    }
+
+    /* 表单区域 */
+    .form-content {
+      padding: 0 2rem 2rem;
+    }
+
+    /* 成功消息 */
+    .alert-success {
+      background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(76, 201, 240, 0.05));
+      border: 1px solid rgba(76, 201, 240, 0.2);
+      border-left: 4px solid var(--success);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      color: #0c5460;
+      display: none;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* 表单组 */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-label i {
+      color: var(--primary);
+      width: 20px;
+    }
+
+    .form-control, .form-select {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 0.875rem 1rem;
+      font-size: 0.95rem;
+      color: var(--dark);
+      transition: all 0.3s ease;
+      background: var(--light);
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15);
+      outline: none;
+    }
+
+    .form-control:hover, .form-select:hover {
+      border-color: #bdbdbd;
+    }
+
+    .form-control::placeholder {
+      color: #adb5bd;
+    }
+
+    /* 密码输入框样式 */
+    .password-input {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--gray);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .password-toggle:hover {
+      color: var(--primary);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    /* 高级设置 */
+    .advanced-section {
+      background: var(--light-gray);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-left: 4px solid var(--primary);
+    }
+
+    .advanced-title {
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .advanced-title i {
+      color: var(--primary);
+    }
+
+    /* 按钮样式 */
+    .btn-submit {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      border-radius: 10px;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      width: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .btn-submit.loading {
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    .btn-submit i {
+      font-size: 1.1rem;
+    }
+
+    /* 加载动画 */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* 底部链接 */
+    .footer-links {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .link-btn {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .link-btn:hover {
+      background: rgba(67, 97, 238, 0.1);
+      color: var(--secondary);
+    }
+
+    .link-btn i {
+      font-size: 1rem;
+    }
+
+    .system-info {
+      font-size: 0.85rem;
+      color: var(--gray);
+      text-align: center;
+      padding: 0 2rem 1.5rem;
+    }
+
+    /* 版权信息 */
+    .copyright {
+      text-align: center;
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 2rem;
+      padding: 0 1rem;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 768px) {
+      .login-card {
+        margin: 1rem;
+      }
+      
+      .card-header,
+      .form-content,
+      .footer-links {
+        padding: 1.5rem;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .mode-tabs {
+        flex-direction: column;
+      }
+      
+      .mode-tab {
+        padding: 0.75rem 1rem;
+      }
+    }
+
+    /* 工具提示 */
+    .info-text {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    /* 表单验证样式 */
+    .form-control:invalid:not(:focus):not(:placeholder-shown) {
+      border-color: var(--accent);
+    }
+
+    .form-control:valid:not(:focus):not(:placeholder-shown) {
+      border-color: #28a745;
+    }
+
+    /* 表单组之间的间距优化 */
+    .form-group + .form-group {
+      margin-top: 1.5rem;
+    }
+
+    /* 下拉选择框图标 */
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l-5-5h10l-5 5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 16px 12px;
+      padding-right: 2.5rem;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-page">
+  <!-- 装饰性背景 -->
+  <div class="bg-decorations">
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+  </div>
+
+  <div class="container login-container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-6 col-md-10">
+        <div class="login-card">
+          <!-- 头部 -->
+          <div class="card-header">
+            <div class="logo-container">
+              <div class="logo-icon">
+                <i class="fas fa-file-contract"></i>
+              </div>
+              <div class="title-section">
+                <h1>数字签约系统</h1>
+                <p>安全、高效的电子合同管理平台</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 模式选择 -->
+          <div class="mode-selector">
+            <div class="mode-tabs">
+              <button type="button" class="mode-tab active" id="loginBtn" data-mode="login">
+                <i class="fas fa-sign-in-alt"></i>
+                登录账户
+              </button>
+              <button type="button" class="mode-tab" id="registerBtn" data-mode="register">
+                <i class="fas fa-user-plus"></i>
+                注册账户
+              </button>
+            </div>
+            <p class="mode-description" id="modeDescription">
+              请输入您的用户名和密码登录系统
+            </p>
+          </div>
+
+          <!-- 表单区域 -->
+          <div class="form-content">
+            <!-- 成功消息 -->
+            <div class="alert alert-success" id="successMessage">
+              <i class="fas fa-check-circle me-2"></i>
+              <span id="successText"></span>
+            </div>
+
+            <form id="authForm">
+              <!-- 用户名 -->
+              <div class="form-group">
+                <label for="authUsername" class="form-label">
+                  <i class="fas fa-user"></i>用户名
+                </label>
+                <input type="text" id="authUsername" class="form-control" placeholder="请输入用户名" required>
+              </div>
+
+              <!-- 密码 -->
+              <div class="form-group">
+                <label for="authPassword" class="form-label">
+                  <i class="fas fa-lock"></i>密码
+                </label>
+                <div class="password-input">
+                  <input type="password" id="authPassword" class="form-control" placeholder="请输入密码" required>
+                  <button type="button" class="password-toggle" id="togglePassword">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 确认密码（注册时显示） -->
+              <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+                <label for="authPasswordConfirm" class="form-label">
+                  <i class="fas fa-lock"></i>确认密码
+                </label>
+                <div class="password-input">
+                  <input type="password" id="authPasswordConfirm" class="form-control" placeholder="请再次输入密码">
+                  <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 高级设置区域 -->
+              <div class="form-group" id="advancedOptions">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="form-label">
+                    <i class="fas fa-cog"></i>高级设置
+                  </span>
+                  <button type="button" class="btn btn-sm btn-link p-0" id="toggleAdvancedBtn">
+                    <i class="fas fa-chevron-down me-1"></i>显示
+                  </button>
+                </div>
+                
+                <div class="advanced-section" id="advancedSection" style="display: none;">
+                  <!-- 合约路径（注册时显示） -->
+                  <div class="mb-3" id="contractPathGroup" style="display: none;">
+                    <label for="contractPath" class="form-label">
+                      <i class="fas fa-file-code"></i>合约路径
+                    </label>
+                    <input type="text" id="contractPath" class="form-control" placeholder="/js/DigitalSignature.json 或完整URL">
+                    <div class="info-text">注册时需要填写合约 artifact 的路径</div>
+                  </div>
+
+                  <!-- 钱包账户选择 -->
+                  <div class="mb-3">
+                    <label for="authAccountSelect" class="form-label">
+                      <i class="fas fa-wallet"></i>选择钱包账户
+                    </label>
+                    <select id="authAccountSelect" class="form-select">
+                      <option value="">（使用钱包默认账户）</option>
+                      <!-- 动态添加选项 -->
+                    </select>
+                    <div class="info-text">可选择钱包中的账户或在下方手动输入地址</div>
+                  </div>
+
+                  <!-- 手动输入地址 -->
+                  <div class="mb-3">
+                    <label for="authAccountManual" class="form-label">
+                      <i class="fas fa-edit"></i>手动输入地址
+                    </label>
+                    <input type="text" id="authAccountManual" class="form-control" placeholder="0x...（可选）">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 提交按钮 -->
+              <button type="submit" class="btn-submit" id="authSubmit">
+                <i class="fas fa-sign-in-alt" id="submitIcon"></i>
+                <span id="submitText">登录</span>
+              </button>
+            </form>
+
+            <!-- 系统提示 -->
+            <div class="system-info">
+              <p class="mb-0"><i class="fas fa-info-circle me-2"></i>如果页面无法列出账户，请确保已安装钱包扩展或启动本地 Ganache 节点。</p>
+            </div>
+          </div>
+
+          <!-- 底部链接 -->
+          <div class="footer-links">
+            <a href="#" class="link-btn" id="forgotPassword">
+              <i class="fas fa-question-circle"></i>帮助中心
+            </a>
+            <a href="/index.html" class="link-btn">
+              <i class="fas fa-home"></i>进入首页
+            </a>
+          </div>
+        </div>
+
+        <!-- 版权信息 -->
+        <div class="copyright">
+          <p>© 2023 数字签约系统 | 保障每一次数字签约的安全与可信</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 当前模式
+      let currentMode = 'login'; // 'login' 或 'register'
+      let isAdvancedVisible = false;
+      
+      // DOM 元素
+      const loginBtn = document.getElementById('loginBtn');
+      const registerBtn = document.getElementById('registerBtn');
+      const modeDescription = document.getElementById('modeDescription');
+      const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+      const contractPathGroup = document.getElementById('contractPathGroup');
+      const advancedSection = document.getElementById('advancedSection');
+      const toggleAdvancedBtn = document.getElementById('toggleAdvancedBtn');
+      const authSubmit = document.getElementById('authSubmit');
+      const submitText = document.getElementById('submitText');
+      const submitIcon = document.getElementById('submitIcon');
+      const successMessage = document.getElementById('successMessage');
+      const successText = document.getElementById('successText');
+      const authForm = document.getElementById('authForm');
+
+      // 初始化
+      function init() {
+        updateModeUI();
+        setupPasswordToggles();
+        setupEventListeners();
+        tryPopulateAccounts();
+      }
+
+      // 更新模式UI
+      function updateModeUI() {
+        if (currentMode === 'login') {
+          // 登录模式
+          loginBtn.classList.add('active');
+          registerBtn.classList.remove('active');
+          modeDescription.textContent = '请输入您的用户名和密码登录系统';
+          confirmPasswordGroup.style.display = 'none';
+          contractPathGroup.style.display = 'none';
+          submitText.textContent = '登录';
+          submitIcon.className = 'fas fa-sign-in-alt';
+          
+          // 登录模式默认隐藏高级设置
+          if (!isAdvancedVisible) {
+            advancedSection.style.display = 'none';
+            toggleAdvancedBtn.innerHTML = '<i class="fas fa-chevron-down me-1"></i>显示';
+          }
+        } else {
+          // 注册模式
+          registerBtn.classList.add('active');
+          loginBtn.classList.remove('active');
+          modeDescription.textContent = '创建新账户，请设置用户名和密码';
+          confirmPasswordGroup.style.display = 'block';
+          contractPathGroup.style.display = 'block';
+          submitText.textContent = '注册';
+          submitIcon.className = 'fas fa-user-plus';
+          
+          // 注册模式默认显示高级设置
+          if (!isAdvancedVisible) {
+            toggleAdvancedBtn.click();
+          }
+        }
+      }
+
+      // 设置密码显示/隐藏切换
+      function setupPasswordToggles() {
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const passwordInput = document.getElementById('authPassword');
+        const confirmPasswordInput = document.getElementById('authPasswordConfirm');
+        
+        if (togglePassword && passwordInput) {
+          togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+          });
+        }
+        
+        if (toggleConfirmPassword && confirmPasswordInput) {
+          toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+          });
+        }
+      }
+
+      // 设置事件监听器
+      function setupEventListeners() {
+        // 模式切换
+        loginBtn.addEventListener('click', function() {
+          if (currentMode !== 'login') {
+            currentMode = 'login';
+            updateModeUI();
+            hideSuccessMessage();
+          }
+        });
+
+        registerBtn.addEventListener('click', function() {
+          if (currentMode !== 'register') {
+            currentMode = 'register';
+            updateModeUI();
+            hideSuccessMessage();
+          }
+        });
+
+        // 高级设置切换
+        toggleAdvancedBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          isAdvancedVisible = !isAdvancedVisible;
+          
+          if (isAdvancedVisible) {
+            advancedSection.style.display = 'block';
+            this.innerHTML = '<i class="fas fa-chevron-up me-1"></i>隐藏';
+            this.classList.add('active');
+          } else {
+            advancedSection.style.display = 'none';
+            this.innerHTML = '<i class="fas fa-chevron-down me-1"></i>显示';
+            this.classList.remove('active');
+          }
+        });
+
+        // 表单提交
+        authForm.addEventListener('submit', handleSubmit);
+
+        // 帮助中心
+        document.getElementById('forgotPassword').addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('如有账号问题，请联系系统管理员或查看帮助文档。');
+        });
+      }
+
+      // 显示成功消息
+      function showSuccessMessage(message) {
+        successText.textContent = message;
+        successMessage.style.display = 'block';
+        setTimeout(hideSuccessMessage, 3000);
+      }
+
+      // 隐藏成功消息
+      function hideSuccessMessage() {
+        successMessage.style.display = 'none';
+      }
+
+      // 处理表单提交
+      async function handleSubmit(e) {
+        e.preventDefault();
+        
+        // 获取表单数据
+        const username = document.getElementById('authUsername').value.trim();
+        const password = document.getElementById('authPassword').value;
+        const isRegister = currentMode === 'register';
+        
+        // 验证必填字段
+        if (!username || !password) {
+          alert('请输入用户名和密码');
+          return;
+        }
+
+        // 注册模式验证
+        if (isRegister) {
+          const confirmPassword = document.getElementById('authPasswordConfirm').value;
+          if (password !== confirmPassword) {
+            alert('两次输入的密码不一致');
+            return;
+          }
+          
+          const contractPath = document.getElementById('contractPath').value.trim();
+          if (!contractPath) {
+            alert('注册时需要填写合约路径');
+            return;
+          }
+        }
+
+        // 显示加载状态
+        const originalText = authSubmit.innerHTML;
+        authSubmit.classList.add('loading');
+        authSubmit.disabled = true;
+        submitText.innerHTML = '<span class="spinner"></span> 处理中...';
+
+        try {
+          // 获取钱包地址
+          const accountSelect = document.getElementById('authAccountSelect');
+          const accountManual = document.getElementById('authAccountManual');
+          const selectedAccount = accountSelect ? accountSelect.value : '';
+          const manualAddress = accountManual ? accountManual.value.trim() : '';
+          const finalAddress = manualAddress || selectedAccount || null;
+          
+          if (isRegister) {
+            // 注册逻辑
+            const contractPath = document.getElementById('contractPath').value.trim();
+            
+            // 如果有app.js，使用其方法
+            if (window.app && typeof window.app.registerLocalAccount === 'function') {
+              await window.app.registerLocalAccount(username, password, contractPath, finalAddress);
+              
+              // 注册成功，切换到登录模式
+              showSuccessMessage('注册成功！正在切换到登录模式...');
+              
+              // 2秒后自动切换到登录模式
+              setTimeout(() => {
+                currentMode = 'login';
+                updateModeUI();
+                // 自动填充用户名
+                document.getElementById('authUsername').value = username;
+                // 清空密码字段
+                document.getElementById('authPassword').value = '';
+                document.getElementById('authPasswordConfirm').value = '';
+                
+                // 重置按钮状态
+                authSubmit.classList.remove('loading');
+                authSubmit.disabled = false;
+                submitText.textContent = '登录';
+                submitIcon.className = 'fas fa-sign-in-alt';
+                
+                showSuccessMessage('请使用刚刚注册的用户名和密码登录');
+              }, 1500);
+              
+              return;
+            } else {
+              // 本地存储注册逻辑
+              const usersRaw = localStorage.getItem('digsig_users') || '{}';
+              const users = JSON.parse(usersRaw);
+              
+              if (users[username]) {
+                alert('用户名已存在');
+                resetSubmitButton();
+                return;
+              }
+              
+              // 密码哈希
+              const hash = await hashPassword(password);
+              users[username] = { 
+                passwordHash: hash, 
+                contractPath: contractPath, 
+                address: finalAddress || '',
+                createdAt: new Date().toISOString()
+              };
+              
+              localStorage.setItem('digsig_users', JSON.stringify(users));
+              
+              // 注册成功，切换到登录模式
+              showSuccessMessage('注册成功！正在切换到登录模式...');
+              
+              setTimeout(() => {
+                currentMode = 'login';
+                updateModeUI();
+                document.getElementById('authUsername').value = username;
+                document.getElementById('authPassword').value = '';
+                document.getElementById('authPasswordConfirm').value = '';
+                
+                authSubmit.classList.remove('loading');
+                authSubmit.disabled = false;
+                submitText.textContent = '登录';
+                submitIcon.className = 'fas fa-sign-in-alt';
+                
+                showSuccessMessage('请使用刚刚注册的用户名和密码登录');
+              }, 1500);
+              
+              return;
+            }
+          } else {
+            // 登录逻辑
+            if (window.app && typeof window.app.loginLocalAccount === 'function') {
+              await window.app.loginLocalAccount(username, password, finalAddress);
+            } else {
+              // 本地存储登录逻辑
+              const usersRaw = localStorage.getItem('digsig_users') || '{}';
+              const users = JSON.parse(usersRaw);
+              
+              if (!users[username]) {
+                alert('用户不存在');
+                resetSubmitButton();
+                return;
+              }
+              
+              const user = users[username];
+              const hash = await hashPassword(password);
+              
+              if (hash !== user.passwordHash) {
+                alert('密码错误');
+                resetSubmitButton();
+                return;
+              }
+              
+              // 保存会话
+              const session = {
+                username: username,
+                contractPath: user.contractPath,
+                address: finalAddress || user.address,
+                loggedIn: true,
+                loginTime: new Date().toISOString()
+              };
+              
+              localStorage.setItem('digsig_session', JSON.stringify(session));
+              // 同步当前选中的账户，供 index.html 使用
+              try { if (session.address) localStorage.setItem('digsig_current_account', session.address); } catch(e) {}
+            }
+            
+            // 登录成功，跳转到操作界面
+            showSuccessMessage('登录成功！正在跳转到操作界面...');
+            setTimeout(() => {
+              window.location.href = '/index.html';
+            }, 1000);
+          }
+          
+        } catch (error) {
+          console.error('操作失败:', error);
+          alert('操作失败: ' + (error.message || error));
+          resetSubmitButton();
+        }
+      }
+
+      // 密码哈希函数
+      async function hashPassword(password) {
+        if (window.crypto && window.crypto.subtle) {
+          const encoder = new TextEncoder();
+          const data = encoder.encode(password);
+          const hash = await crypto.subtle.digest('SHA-256', data);
+          return Array.from(new Uint8Array(hash))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
+        } else {
+          return btoa(password);
+        }
+      }
+
+      // 重置提交按钮
+      function resetSubmitButton() {
+        authSubmit.classList.remove('loading');
+        authSubmit.disabled = false;
+        submitText.textContent = currentMode === 'login' ? '登录' : '注册';
+        submitIcon.className = currentMode === 'login' ? 'fas fa-sign-in-alt' : 'fas fa-user-plus';
+      }
+
+      // 尝试填充账户
+      function tryPopulateAccounts() {
+        if (window.app && typeof window.app.populateAccountSelects === 'function') {
+          try {
+            window.app.populateAccountSelects().catch(() => {});
+          } catch(e) {}
+        } else {
+          setTimeout(() => {
+            if (window.app && typeof window.app.populateAccountSelects === 'function') {
+              try { 
+                window.app.populateAccountSelects().catch(() => {}); 
+              } catch(e) {}
+            } else {
+              // 如果没有app，添加一些模拟账户选项
+              const accountSelect = document.getElementById('authAccountSelect');
+              if (accountSelect) {
+                const mockAccounts = [
+                  { address: '0x742d35Cc6634C0532925a3b844Bc9e4C9f5C5b5e', name: '主账户' },
+                  { address: '0x8ba1f109551bD432803012645Ac136ddd64DBA72', name: '测试账户' },
+                  { address: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B', name: '开发账户' }
+                ];
+                
+                mockAccounts.forEach(account => {
+                  const option = document.createElement('option');
+                  option.value = account.address;
+                  option.textContent = `${account.name}: ${account.address.substring(0, 8)}...${account.address.substring(36)}`;
+                  accountSelect.appendChild(option);
+                });
+              }
+            }
+          }, 300);
+        }
+      }
+
+      // 初始化应用
+      init();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "digital-signature-system",
+  "version": "1.0.0",
+  "description": "基于区块链的数字签约管理系统",
+  "main": "truffle-config.js",
+  "scripts": {
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "test": "truffle test",
+    "dev": "lite-server --baseDir=src",
+    "migrate-and-build": "npx truffle migrate --network development && node scripts/build.js",
+    "e2e": "node scripts/puppeteer_login_test.js"
+  },
+  "dependencies": {
+    "@truffle/contract": "^4.5.0",
+    "puppeteer": "^24.32.0",
+    "web3": "^1.7.0"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1",
+    "truffle": "^5.5.0"
+  }
+}

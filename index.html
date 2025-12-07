@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字签约管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect fill='%234f46e5' width='64' height='64'/><text x='32' y='38' font-family='Arial' font-size='28' fill='white' text-anchor='middle'>DS</text></svg>">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=">
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=">
+    <link rel="icon" type="image/png" sizes="16x16" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --primary-light: #6366f1;
+            --secondary-light: #f8fafc;
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            --border-radius-lg: 16px;
+            --border-radius-md: 12px;
+            --border-radius-sm: 8px;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: #f9fafb;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .navbar {
+            background: var(--primary-gradient) !important;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand i {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+
+        .sidebar {
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.04);
+            min-height: calc(100vh - 76px);
+            padding: 1.5rem 0 !important;
+        }
+
+        .list-group-item {
+            border: none;
+            border-radius: var(--border-radius-sm) !important;
+            margin: 4px 1rem;
+            padding: 0.85rem 1.25rem;
+            color: #64748b;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            border-left: 3px solid transparent;
+        }
+
+        .list-group-item:hover {
+            background-color: #f1f5f9;
+            color: #4f46e5;
+            transform: translateX(4px);
+        }
+
+        .list-group-item.active {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+            border-color: #4f46e5;
+            border-left: 3px solid white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .main-content {
+            padding: 2rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            border: none;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-4px);
+        }
+
+        .card-header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+            color: #1f2937;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        h2 {
+            color: #1f2937;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 50px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid #d1d5db;
+            border-radius: var(--border-radius-sm);
+            padding: 0.75rem 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn {
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-outline-light {
+            border-width: 1px;
+        }
+
+        .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .contract-card {
+            background: white;
+            border-radius: var(--border-radius-md);
+            border: 1px solid #e5e7eb;
+            transition: var(--transition-smooth);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .contract-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hover-shadow);
+            border-color: #c7d2fe;
+        }
+
+        .contract-card-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 1.25rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .badge-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        }
+
+        .badge-info {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition-smooth);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-icon.primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+
+        .stat-icon.success {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+
+        .stat-icon.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .stat-icon.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: var(--primary-gradient);
+            color: white;
+            border-bottom: none;
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 1.5rem 2rem;
+        }
+
+        .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+        .navbar-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            backdrop-filter: blur(10px);
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: white;
+        }
+
+        .user-address {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .tab-pane {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tx-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            transition: var(--transition-smooth);
+        }
+
+        .tx-item:hover {
+            background: #f8fafc;
+        }
+
+        .tx-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+                padding: 1rem 0 !important;
+            }
+            
+            .main-content {
+                padding: 1.5rem;
+            }
+            
+            .navbar-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 0.5rem;
+            }
+            
+            .navbar-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* 加载动画 */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e5e7eb;
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #9ca3af;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* 进度条样式 */
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        /* 工具提示增强 */
+        .tooltip-inner {
+            border-radius: var(--border-radius-sm);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 早期注册未处理的 promise rejection 处理器，避免页面加载或扩展注入时
+        // 媒体播放（play）被立即 pause 导致的 AbortError 在控制台产生大量噪声。
+        window.addEventListener('unhandledrejection', function (ev) {
+            try {
+                const r = ev && ev.reason;
+                if (!r) return;
+                const msg = (r && r.message) ? r.message : String(r);
+                if (r && (r.name === 'AbortError' || msg.indexOf('play() request was interrupted') >= 0)) {
+                    // 安静处理，不冒泡到控制台未捕获错误报警
+                    ev.preventDefault && ev.preventDefault();
+                    console.debug('Ignored media AbortError (early):', r);
+                }
+            } catch (e) {
+                // 忽略处理器内部错误
+            }
+        });
+    </script>
+    <script>
+        (function(){
+            try {
+                const session = localStorage.getItem('digsig_session');
+                if (session) return;
+                if (location.pathname !== '/login.html') {
+                    window.location.href = '/login.html';
+                }
+            } catch (e) { /* ignore */ }
+        })();
+    </script>
+
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-file-signature"></i>
+                数字签约管理系统
+            </a>
+            
+            <div class="navbar-nav ms-auto align-items-center">
+                <div class="user-info me-3 d-none d-md-block">
+                    <div class="user-name" id="userName">未登录</div>
+                    <div class="user-address" id="userAddress">0x...</div>
+                </div>
+                
+                <div class="navbar-controls">
+                    <!-- 已移除账号选择下拉菜单 -->
+                    <!-- 已移除手动登录按钮 -->
+                    
+                    <button class="btn btn-outline-light btn-sm me-1" id="logoutBtn" title="登出">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                    
+                    <button class="btn btn-outline-light btn-sm me-1" id="openSettings" title="设置">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    
+                    <button class="btn btn-outline-light btn-sm" id="connectWallet">
+                        <i class="fas fa-wallet me-1"></i>连接钱包
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏 -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="list-group">
+                    <a href="#dashboard" class="list-group-item list-group-item-action active" data-bs-toggle="tab">
+                        <i class="fas fa-tachometer-alt me-2"></i>仪表板
+                    </a>
+                    <a href="#create-contract" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                        <i class="fas fa-plus-circle me-2"></i>创建合同
+                    </a>
+                    <a href="#my-contracts" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                        <i class="fas fa-file-contract me-2"></i>我的合同
+                    </a>
+                    <a href="#pending-contracts" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                        <i class="fas fa-clock me-2"></i>待签署合同
+                    </a>
+                    <a href="#verify-contract" class="list-group-item list-group-item-action" data-bs-toggle="tab">
+                        <i class="fas fa-check-circle me-2"></i>验证合同
+                    </a>
+                </div>
+            </div>
+
+            <!-- 主内容区 -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="tab-content">
+                    <!-- 仪表板 -->
+                    <div class="tab-pane fade show active" id="dashboard">
+                        <h2 class="mb-4"><i class="fas fa-tachometer-alt me-2"></i>仪表板概览</h2>
+                        
+                        <!-- 统计数据卡片 -->
+                        <div class="row g-4 mb-5" id="dashboardStats">
+                            <div class="col-md-3 col-sm-6">
+                                <div class="stat-card animate__animated animate__fadeInUp">
+                                    <div class="stat-icon primary">
+                                        <i class="fas fa-file-contract"></i>
+                                    </div>
+                                    <div class="stat-number" id="totalContracts">0</div>
+                                    <div class="stat-label">总合同数</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="stat-card animate__animated animate__fadeInUp animate__delay-1s">
+                                    <div class="stat-icon warning">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="stat-number" id="pendingContracts">0</div>
+                                    <div class="stat-label">待签署</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="stat-card animate__animated animate__fadeInUp animate__delay-2s">
+                                    <div class="stat-icon success">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="stat-number" id="signedContracts">0</div>
+                                    <div class="stat-label">已签署</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6">
+                                <div class="stat-card animate__animated animate__fadeInUp animate__delay-3s">
+                                    <div class="stat-icon info">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-number" id="totalSigners">0</div>
+                                    <div class="stat-label">签约方数</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span>最近交易记录</span>
+                                        <span class="badge bg-light text-primary">实时更新</span>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="list-group list-group-flush" id="txHistory">
+                                            <div class="empty-state">
+                                                <i class="fas fa-exchange-alt"></i>
+                                                <p>暂无交易记录</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-6">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title mb-3">快速操作</h5>
+                                        <p class="card-text text-muted mb-4">管理您的数字合同，快速创建、签署和验证合同文件。</p>
+                                        
+                                        <div class="d-grid gap-3 mt-auto">
+                                            <button class="btn btn-primary btn-lg" onclick="window.app && window.app.showLoginModal()">
+                                                <i class="fas fa-plus-circle me-2"></i>创建新合同
+                                            </button>
+                                            
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-outline-primary flex-fill" id="toggleThemeBtn">
+                                                    <i class="fas fa-palette me-2"></i>切换主题
+                                                </button>
+                                                <button class="btn btn-outline-secondary flex-fill" id="refreshDataBtn">
+                                                    <i class="fas fa-redo me-2"></i>刷新数据
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="progress mt-4">
+                                                <div class="progress-bar" id="storageProgress" style="width: 65%;"></div>
+                                            </div>
+                                            <small class="text-muted text-center">存储使用情况：65%</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 创建合同 -->
+                    <div class="tab-pane fade" id="create-contract">
+                        <h2 class="mb-4"><i class="fas fa-plus-circle me-2"></i>创建新合同</h2>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="createContractForm">
+                                    <div class="row g-4">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="contractTitle" class="form-label fw-semibold">合同标题</label>
+                                                <input type="text" class="form-control form-control-lg" id="contractTitle" 
+                                                       placeholder="请输入合同标题" required>
+                                                <div class="form-text">清晰明了的标题有助于后续管理</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="contractContent" class="form-label fw-semibold">合同内容</label>
+                                                <textarea class="form-control" id="contractContent" rows="6" 
+                                                          placeholder="在此输入合同详细内容..." required></textarea>
+                                                <div class="form-text">请详细描述合同条款和条件</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="signerAddresses" class="form-label fw-semibold">签约方地址</label>
+                                                <textarea class="form-control" id="signerAddresses" rows="4" 
+                                                          placeholder="0x742d35Cc6634C0532925a3b8D...
+0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B...
+（每行一个地址）" required></textarea>
+                                                <div class="form-text">请输入所有签约方的钱包地址，每个地址占一行</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="expirationDays" class="form-label fw-semibold">有效期（天）</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" id="expirationDays" 
+                                                           value="30" min="1" max="365" required>
+                                                    <span class="input-group-text">天</span>
+                                                </div>
+                                                <div class="form-text">设置合同有效期限</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-12">
+                                            <div class="d-flex gap-2">
+                                                <button type="submit" class="btn btn-primary btn-lg px-4">
+                                                    <i class="fas fa-save me-2"></i>创建合同
+                                                </button>
+                                                <button type="reset" class="btn btn-outline-secondary btn-lg px-4">
+                                                    <i class="fas fa-redo me-2"></i>重置表单
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 我的合同 -->
+                    <div class="tab-pane fade" id="my-contracts">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2><i class="fas fa-file-contract me-2"></i>我创建的合同</h2>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-primary" id="filterAll">全部</button>
+                                <button class="btn btn-outline-success" id="filterSigned">已签署</button>
+                                <button class="btn btn-outline-warning" id="filterPending">待签署</button>
+                            </div>
+                        </div>
+                        
+                            <div class="row">
+                                <div class="col-lg-7">
+                                    <div id="myContractsList">
+                                        <div class="empty-state">
+                                            <i class="fas fa-file-alt fa-3x mb-3"></i>
+                                            <h4>暂无合同</h4>
+                                            <p class="text-muted">您还没有创建任何合同，点击"创建合同"开始使用</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-5">
+                                    <h5 class="mb-3"><i class="fas fa-check-circle me-2"></i>我已签署的合同</h5>
+                                    <div id="signedContractsList">
+                                        <div class="empty-state">
+                                            <i class="fas fa-check fa-3x mb-3"></i>
+                                            <h5>暂无已签署合同</h5>
+                                            <p class="text-muted">您签署的合同会在这里显示</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <!-- 待签署合同 -->
+                    <div class="tab-pane fade" id="pending-contracts">
+                        <h2 class="mb-4"><i class="fas fa-clock me-2"></i>待签署合同</h2>
+                        
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            您有 <span id="pendingCount" class="fw-bold">0</span> 个合同等待签署
+                        </div>
+                        
+                        <div id="pendingContractsList">
+                            <div class="empty-state">
+                                <i class="fas fa-check-circle fa-3x mb-3"></i>
+                                <h4>无待签署合同</h4>
+                                <p class="text-muted">您当前没有需要签署的合同</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 验证合同 -->
+                    <div class="tab-pane fade" id="verify-contract">
+                        <h2 class="mb-4"><i class="fas fa-check-circle me-2"></i>验证合同真实性</h2>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="text-muted mb-4">通过合同ID和内容验证合同在区块链上的真实性和完整性</p>
+                                
+                                <form id="verifyContractForm">
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="verifyContractId" class="form-label fw-semibold">合同ID</label>
+                                                <input type="number" class="form-control" id="verifyContractId" 
+                                                       placeholder="输入合同ID" required>
+                                                <div class="form-text">在区块链上注册的合同唯一标识</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="verifyContent" class="form-label fw-semibold">合同内容</label>
+                                                <textarea class="form-control" id="verifyContent" rows="3" 
+                                                          placeholder="输入需要验证的合同内容" required></textarea>
+                                                <div class="form-text">输入要验证的合同完整内容</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                                <i class="fas fa-shield-alt me-2"></i>验证合同
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                                <div id="verificationResult" class="mt-5">
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        验证结果将在此显示
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 合同详情模态框 -->
+    <div class="modal fade" id="contractModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-file-contract me-2"></i>合同详情</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+                </div>
+                <div class="modal-body" id="contractModalBody">
+            <!-- 合同详情内容将通过 JavaScript 动态填充 -->
+            <div class="contract-details-placeholder text-center text-muted py-4">正在加载合同详情…</div>
+                </div>
+                <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-outline-primary" id="exportContractBtn" style="display:none;">导出合同</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置模态框 -->
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-cog me-2"></i>系统设置</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">智能合约地址</label>
+                        <input class="form-control" id="settingsContractAddress" placeholder="0x...">
+                        <div class="form-text mt-2">已部署的智能合约地址</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">RPC 提供者（可选）</label>
+                        <input class="form-control" id="settingsRpcProvider" placeholder="http://127.0.0.1:7545">
+                        <div class="form-text mt-2">连接到本地或远程以太坊节点</div>
+                    </div>
+                    
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="settingsAutoSession" style="width: 3em; height: 1.5em;">
+                        <label class="form-check-label" for="settingsAutoSession">
+                            <strong>自动登录</strong>
+                            <div class="form-text">启动时自动使用已连接钱包创建会话</div>
+                        </label>
+                    </div>
+                    
+                    <div class="alert alert-warning" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        修改设置后可能需要刷新页面才能生效
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveSettingsBtn">
+                        <i class="fas fa-save me-2"></i>保存设置
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        (function(){
+            // 添加一些动画效果
+            document.addEventListener('DOMContentLoaded', function() {
+                // 为导航链接添加点击效果
+                const navLinks = document.querySelectorAll('.list-group-item');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+                
+                // 主题切换
+                const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+                if (toggleThemeBtn) {
+                    toggleThemeBtn.addEventListener('click', function() {
+                        document.body.classList.toggle('dark-theme');
+                        this.innerHTML = document.body.classList.contains('dark-theme') 
+                            ? '<i class="fas fa-sun me-2"></i>浅色模式'
+                            : '<i class="fas fa-moon me-2"></i>深色模式';
+                    });
+                }
+                
+                // 添加加载动画
+                const refreshBtn = document.getElementById('refreshDataBtn');
+                if (refreshBtn) {
+                    refreshBtn.addEventListener('click', function() {
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>刷新中...';
+                        setTimeout(() => {
+                            this.innerHTML = '<i class="fas fa-redo me-2"></i>刷新数据';
+                        }, 1000);
+                    });
+                }
+                
+                // 连接钱包按钮事件
+                const connectWalletBtn = document.getElementById('connectWallet');
+                if (connectWalletBtn) {
+                    connectWalletBtn.addEventListener('click', function() {
+                        if (window.app && typeof window.app.connectWallet === 'function') {
+                            window.app.connectWallet();
+                        } else {
+                            alert('钱包连接功能正在初始化...');
+                        }
+                    });
+                }
+                
+                // 登出按钮事件
+                const logoutBtn = document.getElementById('logoutBtn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', function() {
+                        if (confirm('确定要退出登录吗？')) {
+                            localStorage.removeItem('digsig_session');
+                            window.location.reload();
+                        }
+                    });
+                }
+                
+                // 设置按钮事件
+                const settingsBtn = document.getElementById('openSettings');
+                if (settingsBtn) {
+                    settingsBtn.addEventListener('click', function() {
+                        const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+                        settingsModal.show();
+                    });
+                }
+                
+                // 保存设置按钮事件
+                const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+                if (saveSettingsBtn) {
+                    saveSettingsBtn.addEventListener('click', function() {
+                        alert('设置已保存！');
+                        const settingsModal = bootstrap.Modal.getInstance(document.getElementById('settingsModal'));
+                        settingsModal.hide();
+                    });
+                }
+                
+                // 合同筛选按钮事件
+                const filterAllBtn = document.getElementById('filterAll');
+                const filterSignedBtn = document.getElementById('filterSigned');
+                const filterPendingBtn = document.getElementById('filterPending');
+                
+                [filterAllBtn, filterSignedBtn, filterPendingBtn].forEach((btn, index) => {
+                    if (btn) {
+                        btn.addEventListener('click', function() {
+                            [filterAllBtn, filterSignedBtn, filterPendingBtn].forEach(b => 
+                                b.classList.remove('active')
+                            );
+                            this.classList.add('active');
+                            // 这里可以添加筛选逻辑
+                        });
+                    }
+                });
+            });
+            
+            // 简单的暗色主题样式
+            const darkThemeCSS = `
+                .dark-theme {
+                    background-color: #1a1a1a;
+                    color: #e0e0e0;
+                }
+                .dark-theme .sidebar {
+                    background-color: #2d2d2d;
+                    border-right-color: #404040;
+                }
+                .dark-theme .card {
+                    background-color: #2d2d2d;
+                    color: #e0e0e0;
+                }
+                .dark-theme .form-control,
+                .dark-theme .form-select {
+                    background-color: #3d3d3d;
+                    border-color: #404040;
+                    color: #e0e0e0;
+                }
+                .dark-theme .list-group-item {
+                    background-color: transparent;
+                    color: #b0b0b0;
+                }
+                .dark-theme .list-group-item:hover {
+                    background-color: #3d3d3d;
+                }
+                .dark-theme .list-group-item.active {
+                    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+                }
+                .dark-theme .card-header {
+                    background-color: #2d2d2d;
+                    border-bottom-color: #404040;
+                }
+                .dark-theme .btn-outline-primary {
+                    border-color: #4f46e5;
+                    color: #4f46e5;
+                }
+                .dark-theme .btn-outline-primary:hover {
+                    background-color: #4f46e5;
+                    color: white;
+                }
+                .dark-theme .stat-card {
+                    background-color: #2d2d2d;
+                }
+                .dark-theme .stat-number {
+                    color: #e0e0e0;
+                }
+                .dark-theme .stat-label {
+                    color: #9ca3af;
+                }
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = darkThemeCSS;
+            document.head.appendChild(style);
+        })();
+    </script>
+</body>
+</html>
